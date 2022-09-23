@@ -1,4 +1,11 @@
-# DICOSAR v1.0.8
+-   <a href="#dicosar-v1.0.10" id="toc-dicosar-v1.0.10">DICOSAR v1.0.10</a>
+    -   <a href="#overview" id="toc-overview">Overview</a>
+    -   <a href="#installation" id="toc-installation">Installation</a>
+        -   <a href="#most-recent-version" id="toc-most-recent-version">Most recent
+            version</a>
+    -   <a href="#basic-usage" id="toc-basic-usage">Basic usage</a>
+
+# DICOSAR v1.0.10
 
 ## Overview
 
@@ -19,7 +26,7 @@ install_github("lhe17/dicosar")
 
 The installation requires Rcpp-1.0.7 and has been tested on R-4.1.0.
 
-Please contact <liang.he@duke.edu> for more information.
+Please contact <lianghe@health.sdu.dk> for more information.
 
 ## Basic usage
 
@@ -29,11 +36,6 @@ follow a standard normal distribution and they are independent.
 
 ``` r
 library(dicosar)
-#> 
-#> Attaching package: 'dicosar'
-#> The following object is masked from 'package:base':
-#> 
-#>     seq
 n = 100
 x1 = matrix(rnorm(2*n),nrow=n)
 x2 = matrix(rnorm(2*n),nrow=n)
@@ -46,13 +48,13 @@ script tests whether the PCCs are the same between the two groups.
 p = dicosar(x1,x2)
 p
 #> $r1
-#> [1] -0.01703903
+#> [1] -0.0430963
 #> 
 #> $r2
-#> [1] -0.1509276
+#> [1] -0.02298952
 #> 
 #> $p
-#> [1] 0.3879636
+#> [1] 0.8763062
 #> 
 #> $p_delta
 #> [1] NA
@@ -73,16 +75,16 @@ be obtained using `delta=TRUE` as follows.
 p = dicosar(x1,x2,delta=TRUE)
 p
 #> $r1
-#> [1] -0.01703903
+#> [1] -0.0430963
 #> 
 #> $r2
-#> [1] -0.1509276
+#> [1] -0.02298952
 #> 
 #> $p
-#> [1] 0.3879636
+#> [1] 0.8763062
 #> 
 #> $p_delta
-#> [1] 0.3767165
+#> [1] 0.872404
 #> 
 #> $code
 #> [1] 1
@@ -101,28 +103,28 @@ x2 = matrix(rnorm(4*n),nrow=n)
 p = dicosar(x1,x2)
 p
 #> $r1
-#>      [,1]       [,2]        [,3]        [,4]
-#> [1,]   NA 0.05903522 -0.02908886 -0.07837627
-#> [2,]   NA         NA -0.17183379 -0.10759844
-#> [3,]   NA         NA          NA  0.01196397
-#> [4,]   NA         NA          NA          NA
+#>      [,1]        [,2]        [,3]        [,4]
+#> [1,]   NA -0.09289001 -0.04270402  0.01899829
+#> [2,]   NA          NA  0.07707626  0.02144922
+#> [3,]   NA          NA          NA -0.03331514
+#> [4,]   NA          NA          NA          NA
 #> 
 #> $r2
-#>      [,1]        [,2]        [,3]         [,4]
-#> [1,]   NA -0.08758217 -0.31576718 -0.258570221
-#> [2,]   NA          NA -0.08022411 -0.009324102
-#> [3,]   NA          NA          NA  0.098498614
-#> [4,]   NA          NA          NA           NA
+#>      [,1]        [,2]       [,3]        [,4]
+#> [1,]   NA -0.06675221 0.07363074  0.09890478
+#> [2,]   NA          NA 0.06230663  0.10457841
+#> [3,]   NA          NA         NA -0.03239522
+#> [4,]   NA          NA         NA          NA
 #> 
 #> $p_single
-#>      [,1]      [,2]       [,3]      [,4]
-#> [1,]   NA 0.2881095 0.03831703 0.2246889
-#> [2,]   NA        NA 0.48915950 0.4752875
-#> [3,]   NA        NA         NA 0.6097066
-#> [4,]   NA        NA         NA        NA
+#>      [,1]      [,2]      [,3]      [,4]
+#> [1,]   NA 0.8435289 0.3999874 0.5949562
+#> [2,]   NA        NA 0.9144790 0.5384619
+#> [3,]   NA        NA        NA 0.9948366
+#> [4,]   NA        NA        NA        NA
 #> 
 #> $p_global
-#> [1] 0.1723248
+#> [1] 0.9716737
 ```
 
 The function also returns a p-value `p_global` of a global test for the

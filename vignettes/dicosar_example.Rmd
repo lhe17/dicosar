@@ -3,11 +3,11 @@ title: "DICOSAR: A robust and fast two-sample test of equal correlations"
 author: "Liang He"
 date: "`r Sys.Date()`"
 output:
-  html_document:
-    toc: yes
   md_document:
     toc: yes
     variant: markdown_github
+  html_document:
+    toc: yes
 vignette: >
   %\VignetteIndexEntry{Robust and fast two-sample test of equal correlations}
   %\VignetteEncoding{UTF-8}
@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# DICOSAR v1.0.8
+# DICOSAR v1.0.10
 
 ## Overview
 
@@ -40,7 +40,7 @@ install_github("lhe17/dicosar")
 
 The installation requires Rcpp-1.0.7 and has been tested on R-4.1.0.
 
-Please contact liang.he@duke.edu for more information.
+Please contact lianghe@health.sdu.dk for more information.
   
 ## Basic usage
 

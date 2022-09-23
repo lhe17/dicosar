@@ -5,9 +5,6 @@ date: "`r Sys.Date()`"
 output:
   html_document:
     toc: yes
-  md_document:
-    toc: yes
-    variant: markdown_github
 vignette: >
   %\VignetteIndexEntry{Robust and fast two-sample test of equal correlations}
   %\VignetteEncoding{UTF-8}
@@ -21,7 +18,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# DICOSAR v1.0.8
+# DICOSAR v1.0.10
 
 ## Overview
 
@@ -40,7 +37,7 @@ install_github("lhe17/dicosar")
 
 The installation requires Rcpp-1.0.7 and has been tested on R-4.1.0.
 
-Please contact liang.he@duke.edu for more information.
+Please contact lianghe@health.sdu.dk for more information.
   
 ## Basic usage
 
@@ -64,7 +61,7 @@ The output shows the PCCs in the two groups, and the p-value for testing the equ
 p = dicosar(x1,x2,delta=TRUE)
 p
 ```
-Here, ```p_delta``` is the p-value based on the Delta method. As shown in our manuscript, the Delta method works quite well under a large sample size, and is very fast. If the input matrices have more than two variables (columns), DICOSAR will compute the p-value for each pair of the variables and return three matrices for the pairwise PCCs and p-values, respectively. Here, we show an example using four variables. The function will also return a p-value ```p_global``` from a globel test for the equality of the two correlation matrices using a Cauchy combination test.
+Here, ```p_delta``` is the p-value based on the Delta method. As shown in our manuscript, the Delta method works quite well under a large sample size, and is very fast. If the input matrices have more than two variables (columns), DICOSAR will compute the p-value for each pair of the variables and return three matrices for the pairwise PCCs and p-values, respectively. Here, we show an example using four variables. 
 
 ```{r,echo=TRUE}
 x1 = matrix(rnorm(4*n),nrow=n)
@@ -72,4 +69,5 @@ x2 = matrix(rnorm(4*n),nrow=n)
 p = dicosar(x1,x2)
 p
 ```
+The function also returns a p-value ```p_global``` of a global test for the equality of these two correlation matrices using a Cauchy combination test (CCT). The CCT is accurate when the number of aggregated p-values is not large. If this number is very large, further assumptions about the structure of the correlations are required by this test for obtaining an accurate p-value.          
 
