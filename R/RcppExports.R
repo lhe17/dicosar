@@ -21,3 +21,7 @@ seq_c <- function(info1, info2, t, zeta) {
     .Call('_dicosar_seq_c', PACKAGE = 'dicosar', info1, info2, t, zeta)
 }
 
+jacift_c <- function(info1, info2, t, zeta) {
+    .Call('_dicosar_jacift_c', PACKAGE = 'dicosar', info1, info2, t, zeta)
+}
+

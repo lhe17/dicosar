@@ -10,12 +10,13 @@
 #' \item{-3}{Too many identical values and NA returned.}
 #' \item{-4}{At least one of the PCCs is one and NA returned.}
 #' \item{-5}{The algorithm in DICOSAR does not converge.}
-#' \item{2 or 3}{The algorithm converges, but the simplified version of DICOSAR (i.e., he first-order approximation of the signed root of the likelihood ratio statistic) is used.}
+#' \item{2 or 3}{The algorithm converges, but the simplified version of DICOSAR (i.e., the first-order approximation of the signed root of the likelihood ratio statistic) is used.}
 #' }
 #'
 #' @param x1 an N1 by P matrix, in which N1 is the number of samples in the first group, and P is the number of variables. If P>2, tests will be run pairwisely.
 #' @param x2 an N2 by P matrix, in which N2 is the number of samples in the second group.
 #' @param delta a logical value. If TRUE, the p-value from the Delta method will also be returned when P=2.
+#' @param solver FALSE by default. If solver=TRUE, BBsolve will be used to solve the saddlepoint equations when multiroot fails to converge. Note that BBsolve is much slower than multiroot.
 #' @return r1: The Pearson correlation coefficient of x1.
 #' @return r2: The Pearson correlation coefficient of x2. 
 #' @return p: The p-value of the test for the equality of Pearson correlation coefficients using DICOSAR.
@@ -32,7 +33,7 @@
 #' 
 
 
-dicosar = function(x1,x2,delta=FALSE)
+dicosar = function(x1,x2,delta=FALSE,solver=FALSE)
 {
   
   nd <- ncol(x1)
@@ -101,7 +102,8 @@ dicosar = function(x1,x2,delta=FALSE)
       x0 <- c(apply(info1,2,mean),apply(info1,2,mean))
       
       p <- rep(NA,3)
-      cp <- cum_dist(r1-r2,info1,info1,x0,imp,n1,n2)
+      cp <- cum_dist(r1-r2,info1,info1,x0,imp,n1,n2,solver)
+      
       if(is.na(cp[1]))
       {
         code <- -5
@@ -157,7 +159,7 @@ dicosar = function(x1,x2,delta=FALSE)
         {
           if((abs(rho1)<1) & (abs(rho2)<1) & (uniqrow>6) & (min(nuniq[c(i,j)])>3))
           {
-            cp <- cum_dist(r1-r2,info1,info1,x0,imp,n1,n2)
+            cp <- cum_dist(r1-r2,info1,info1,x0,imp,n1,n2,solver)
             
             if(!is.na(cp[1]))
             {

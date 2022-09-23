@@ -17,7 +17,11 @@ seq = function(t,info1,info2,zeta)
 solve_seq = function(zeta,info1,info2)
 {
   suppressWarnings(rootSolve::multiroot(seq,rep(0,10),info1=info1,info2=info2,zeta=zeta,rtol = 1e-10,atol = 1e-10, ctol = 1e-10)$root)
-  # BBsolve(rep(0,10),seq,info1=info1,info2=info2,zeta=zeta)$par
+}
+
+solve_seq2 = function(zeta,info1,info2)
+{
+  BBsolve(rep(0,10),seq,info1=info1,info2=info2,zeta=zeta, control = list(tol = 1e-10),quiet=TRUE)$par
 }
 
 ell = function(z,info1,info2,n1,n2)
@@ -37,37 +41,65 @@ del_g = function(z)
 }
 
 
-lagrange = function(z_lam,w,info1,info2,n1,n2)
+lagrange = function(z_lam,w,info1,info2,n1,n2,solver=0)
 {
   npa <- length(z_lam) - 1
-  t <- solve_seq(z_lam[1:npa],info1,info2)
+  if(solver==0)
+  {
+    t <- solve_seq(z_lam[1:npa],info1,info2)
+  }else{
+    t <- solve_seq2(z_lam[1:npa],info1,info2)
+  }
   t <- c(n1*t[1:5],n2*t[6:10])
   c(z_lam[length(z_lam)]*del_g(z_lam[1:npa])+t,g(z_lam[1:npa])-w)
 }
   
-cum_dist = function(w,info1,info2,x0,imp=FALSE,n1,n2)
+cum_dist = function(w,info1,info2,x0,imp=FALSE,n1,n2,solver)
 {
   invisible(capture.output( 
    solv1 <- tryCatch(
     {
-      nleqslv(c(x0,0),lagrange,w=w,info1=info1,info2=info2,n1=n1,n2=n2,method='Newton',global='hook',xscalm='auto',jacobian=FALSE,control=list(allowSingular=TRUE,maxit=500))
+      nleqslv(c(x0,0),lagrange,solver=0,w=w,info1=info1,info2=info2,n1=n1,n2=n2,method='Newton',global='hook',xscalm='auto',jacobian=FALSE,control=list(allowSingular=TRUE,maxit=500))
     },
     error=function(cond){NA}
     )
   ))
   
-  if(is.na(solv1[[1]][1]))
-  {
-    return(rep(NA,3))
+  if(!is.na(solv1[[1]][1]))
+  { 
+    if(max(abs(solv1$fvec))>0.01)
+    {solv1 <- NA}
   }
   
-  if(max(abs(solv1$fvec))>0.01)
+  if(is.na(solv1[[1]][1]))
   {
-    return(rep(NA,3))
+    if(solver==TRUE)
+    {
+      solv1 <- tryCatch({
+        nleqslv(c(x0,0),lagrange,solver=1,w=w,info1=info1,info2=info2,n1=n1,n2=n2,method='Newton',global='hook',xscalm='auto',jacobian=FALSE,control=list(allowSingular=TRUE,maxit=500))
+      },
+      error=function(cond){NA}
+      )
+    
+      if(is.na(solv1[[1]][1]))
+      {
+        return(rep(NA,3))
+      }
+      
+      if(max(abs(solv1$fvec))>0.01)
+      {
+        return(rep(NA,3))
+      }
+    }else{
+      return(rep(NA,3))
+    }
   }
   
   zetas <- solv1$x[1:10]
-  t <- solve_seq(zetas,info1,info2)
+  #t <- solve_seq(zetas,info1,info2)
+  t = solv1$fvec[1:10] - solv1$x[11]*del_g(zetas)
+  t[1:5] = t[1:5]/n1
+  t[6:10] = t[6:10]/n2
   
   if(max(abs(zetas-x0))<1e-3)
   {
@@ -79,7 +111,8 @@ cum_dist = function(w,info1,info2,x0,imp=FALSE,n1,n2)
   if(imp==TRUE)
   {
     grad = c(-n1*t[1:5],-n2*t[6:10])
-    hes = numDeriv::jacobian(solve_seq,zetas,info1=info1,info2=info2,'simple',method.args=list(eps=jtol))
+    # hes = numDeriv::jacobian(solve_seq,zetas,info1=info1,info2=info2,'simple',method.args=list(eps=jtol))
+    hes = jacift_c(info1,info2,t,zetas)
     hes[1:5,1:5] = n1*hes[1:5,1:5]
     hes[6:10,6:10] = n2*hes[6:10,6:10]
     
@@ -88,7 +121,8 @@ cum_dist = function(w,info1,info2,x0,imp=FALSE,n1,n2)
     mj = hes + solv1$x[11]*hes_g
     qw = as.numeric(t(grad_g)%*%solve(mj,grad_g))
     
-    hes0 <- numDeriv::jacobian(solve_seq,x0,info1=info1,info2=info2,'simple',method.args=list(eps=jtol))
+    # hes0 <- numDeriv::jacobian(solve_seq,x0,info1=info1,info2=info2,'simple',method.args=list(eps=jtol))
+    hes0 <- jacift_c(info1,info2,rep(0,10),x0)
     hes0[1:5,1:5] <- n1*hes0[1:5,1:5]
     hes0[6:10,6:10] <- n2*hes0[6:10,6:10]
     

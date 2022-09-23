@@ -71,6 +71,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// jacift_c
+Eigen::MatrixXd jacift_c(const Eigen::Map<Eigen::MatrixXd>& info1, const Eigen::Map<Eigen::MatrixXd>& info2, const Eigen::VectorXd& t, const Eigen::VectorXd& zeta);
+RcppExport SEXP _dicosar_jacift_c(SEXP info1SEXP, SEXP info2SEXP, SEXP tSEXP, SEXP zetaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd>& >::type info1(info1SEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd>& >::type info2(info2SEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type t(tSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type zeta(zetaSEXP);
+    rcpp_result_gen = Rcpp::wrap(jacift_c(info1, info2, t, zeta));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_dicosar_CGF_c", (DL_FUNC) &_dicosar_CGF_c, 2},
@@ -78,6 +92,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dicosar_g_c", (DL_FUNC) &_dicosar_g_c, 1},
     {"_dicosar_del_g_c", (DL_FUNC) &_dicosar_del_g_c, 1},
     {"_dicosar_seq_c", (DL_FUNC) &_dicosar_seq_c, 4},
+    {"_dicosar_jacift_c", (DL_FUNC) &_dicosar_jacift_c, 4},
     {NULL, NULL, 0}
 };
 

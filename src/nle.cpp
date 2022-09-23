@@ -93,3 +93,39 @@ Eigen::VectorXd seq_c(const Eigen::Map<Eigen::MatrixXd> & info1,const Eigen::Map
   return s;
   
 }
+
+// [[Rcpp::export]]
+Eigen::MatrixXd jacift_c(const Eigen::Map<Eigen::MatrixXd> & info1,const Eigen::Map<Eigen::MatrixXd> & info2,
+                      const Eigen::VectorXd & t,const Eigen::VectorXd & zeta) {
+  
+  Eigen::MatrixXd jac = Eigen::MatrixXd::Zero(10,10);
+  Eigen::MatrixXd dx = Eigen::MatrixXd::Zero(10,10);
+  Eigen::MatrixXd dy = Eigen::MatrixXd::Zero(10,10);
+  Eigen::ArrayXd temp1 = (info1*t.head(5)).array().exp();
+  Eigen::ArrayXd temp2 = (info2*t.tail(5)).array().exp();
+  
+  double sum1 = -temp1.sum();
+  double sum2 = -temp2.sum();
+  for(int i=0;i<5;i++)
+  {
+    dx(i,i) = sum1;
+    dx(i+5,i+5) = sum2;
+  }
+  
+  for(int i=0;i<5;i++)
+  {
+    Eigen::VectorXd tempy = (info1.col(i).array() - zeta(i))*temp1;
+    dy.row(i).head(5) = tempy.transpose()*info1;
+  }
+  
+  for(int i=0;i<5;i++)
+  {
+    Eigen::VectorXd tempy = (info2.col(i).array() - zeta(i+5))*temp2;
+    dy.row(i+5).tail(5) = tempy.transpose()*info2;
+  }
+  
+  return -dy.inverse()*dx;
+  
+}
+
+

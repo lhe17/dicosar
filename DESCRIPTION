@@ -1,17 +1,17 @@
 Package: dicosar
 Type: Package
 Title: Two-sample homogeneity test of Pearson's correlations using saddlepoint approximation and signed root of likelihood ratio statistic
-Version: 1.0.8
-Date: 2021-01-21
+Version: 1.0.10
+Date: 2021-09-20
 Author: Liang He, Ian Philipp
-Maintainer: Liang He <liang.he@duke.edu>
-Description: Testing differential Pearson's correlations between two samples using multivariate saddlepoint approximation and the signed root of likelihood ratio statistic.
+Maintainer: Liang He <lianghe@health.sdu.dk>
+Description: Testing differential Pearson's correlations between two samples using multivariate saddlepoint approximation and the signed root of the likelihood ratio statistic.
 License: GPL-3
 Encoding: UTF-8
-Imports: Rcpp (>= 1.0.7), MASS, numDeriv, rootSolve, nleqslv, RcppEigen
+Imports: Rcpp (>= 1.0.7), MASS, numDeriv, rootSolve, nleqslv, RcppEigen, BB
 LinkingTo: Rcpp, RcppEigen
 Depends: R (>= 4.1)
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1

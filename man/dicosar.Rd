@@ -4,7 +4,7 @@
 \alias{dicosar}
 \title{Testing the equality of Pearson correlation coefficients between two groups}
 \usage{
-dicosar(x1, x2, delta = FALSE)
+dicosar(x1, x2, delta = FALSE, solver = FALSE)
 }
 \arguments{
 \item{x1}{an N1 by P matrix, in which N1 is the number of samples in the first group, and P is the number of variables. If P>2, tests will be run pairwisely.}
@@ -12,6 +12,8 @@ dicosar(x1, x2, delta = FALSE)
 \item{x2}{an N2 by P matrix, in which N2 is the number of samples in the second group.}
 
 \item{delta}{a logical value. If TRUE, the p-value from the Delta method will also be returned when P=2.}
+
+\item{solver}{FALSE by default. If solver=TRUE, BBsolve will be used to solve the saddlepoint equations when multiroot fails to converge. Note that BBsolve is much slower than multiroot.}
 }
 \value{
 r1: The Pearson correlation coefficient of x1.
@@ -24,7 +26,7 @@ code: More information about the convergence, optimization, etc. A negative valu
 
 p_delta: The p-value of the test for the equality of Pearson correlation coefficients using the Delta method.
 
-p_global: A p-value of the global test of the equality of two correlation matrices for the P variables in the input data. Only returned when P>2.
+p_global: A p-value of the global test for the equality of two correlation matrices for each pair of the P variables in the input data. Only returned when P>2.
 }
 \description{
 These are further details.
@@ -38,7 +40,7 @@ These are further details.
 \item{-3}{Too many identical values and NA returned.}
 \item{-4}{At least one of the PCCs is one and NA returned.}
 \item{-5}{The algorithm in DICOSAR does not converge.}
-\item{2 or 3}{The algorithm converges, but the simplified version of DICOSAR (i.e., he first-order approximation of the signed root of the likelihood ratio statistic) is used.}
+\item{2 or 3}{The algorithm converges, but the simplified version of DICOSAR (i.e., the first-order approximation of the signed root of the likelihood ratio statistic) is used.}
 }
 }
 
